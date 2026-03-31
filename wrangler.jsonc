@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "boostme",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_CACHE_WORKERS_KV",
+      "id": "787625895744470984928b5773663a8a" 
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
