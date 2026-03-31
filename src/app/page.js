@@ -6,161 +6,87 @@ import SearchBar from '@/components/SearchBar';
 import CategoryCard from '@/components/CategoryCard';
 import AdCard from '@/components/AdCard';
 import Footer from '@/components/Footer';
-import { Car, Home, Laptop, Gamepad2, Shirt, Baby } from 'lucide-react';
+import { Car, Home, Laptop, Gamepad2, Shirt, Baby, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import BannerSlider from '@/components/BannerSlider';
 
-// Mock data - you can move this to a separate file later
+// تصنيفات الصفحة الرئيسية
 const categories = [
-  { icon: Car, name: 'Vehicles', slug: 'vehicles', count: '12,345' },
-  { icon: Home, name: 'Property', slug: 'property', count: '8,567' },
-  { icon: Laptop, name: 'Electronics', slug: 'electronics', count: '15,432' },
-  { icon: Shirt, name: 'Fashion', slug: 'fashion', count: '9,876' },
-  { icon: Gamepad2, name: 'Games', slug: 'games', count: '4,321' },
-  { icon: Baby, name: 'Kids', slug: 'kids', count: '6,789' },
+  { icon: Car, name: 'طوموبيلات', slug: 'vehicles', count: '12,345' },
+  { icon: Home, name: 'عقارات', slug: 'property', count: '8,567' },
+  { icon: Laptop, name: 'إلكترونيات', slug: 'electronics', count: '15,432' },
+  { icon: Shirt, name: 'موضة وملابس', slug: 'fashion', count: '9,876' },
+  { icon: Gamepad2, name: 'ألعاب وترفيه', slug: 'games', count: '4,321' },
+  { icon: Baby, name: 'مستلزمات الأطفال', slug: 'kids', count: '6,789' },
 ];
 
 const recentAds = [
-  // Mobiles
+  // هواتف
   {
     id: 1,
-    title: 'Samsung Galaxy S21 Ultra',
-    price: 'Rs 180,000',
-    location: 'Karachi, Sindh',
+    title: 'Samsung Galaxy S21 Ultra نقي',
+    price: '5,500 DH',
+    location: 'الدار البيضاء، المعاريف',
     image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
-    date: '5 hours ago',
+    date: 'منذ 5 ساعات',
     featured: false,
-    category: 'Mobiles',
+    category: 'هواتف',
   },
   {
     id: 2,
-    title: 'iPhone 13 Pro Max',
-    price: 'Rs 220,000',
-    location: 'Islamabad, Capital Territory',
+    title: 'iPhone 13 Pro Max بالكرطونة',
+    price: '7,200 DH',
+    location: 'الرباط، حي الرياض',
     image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=400&q=80',
-    date: '1 day ago',
+    date: 'يوم واحد',
     featured: true,
-    category: 'Mobiles',
+    category: 'هواتف',
   },
-  {
-    id: 3,
-    title: 'Xiaomi Redmi Note 12',
-    price: 'Rs 55,000',
-    location: 'Lahore, Punjab',
-    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
-    date: '3 days ago',
-    featured: false,
-    category: 'Mobiles',
-  },
-  // Cars
+  // سيارات
   {
     id: 4,
-    title: 'Honda Civic 2018 for Sale',
-    price: 'Rs 3,200,000',
-    location: 'Lahore, Punjab',
+    title: 'Honda Civic 2018 للبيع',
+    price: '145,000 DH',
+    location: 'طنجة، مالاباطا',
     image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=400&q=80',
-    date: '2 hours ago',
+    date: 'ساعتين',
     featured: true,
-    category: 'Cars',
+    category: 'سيارات',
   },
-  {
-    id: 5,
-    title: 'Toyota Corolla 2017',
-    price: 'Rs 2,500,000',
-    location: 'Faisalabad, Punjab',
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-    date: '2 days ago',
-    featured: false,
-    category: 'Cars',
-  },
-  {
-    id: 6,
-    title: 'Suzuki Mehran 2016',
-    price: 'Rs 950,000',
-    location: 'Karachi, Sindh',
-    image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
-    date: '4 days ago',
-    featured: false,
-    category: 'Cars',
-  },
-  // Electronics
+  // إلكترونيات
   {
     id: 7,
-    title: 'MacBook Pro 2020',
-    price: 'Rs 250,000',
-    location: 'Islamabad, Capital Territory',
+    title: 'MacBook Pro 2020 M1',
+    price: '9,500 DH',
+    location: 'مراكش، جليز',
     image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80',
-    date: '1 day ago',
+    date: 'يوم واحد',
     featured: true,
-    category: 'Electronics',
-  },
-  {
-    id: 8,
-    title: 'Gaming PC Full Setup',
-    price: 'Rs 120,000',
-    location: 'Rawalpindi, Punjab',
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-    date: '3 days ago',
-    featured: false,
-    category: 'Electronics',
-  },
-  {
-    id: 9,
-    title: 'Sony WH-1000XM4 Headphones',
-    price: 'Rs 45,000',
-    location: 'Multan, Punjab',
-    image: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=400&q=80',
-    date: '2 days ago',
-    featured: false,
-    category: 'Electronics',
+    category: 'إلكترونيات',
   },
 ];
 
-// Placeholder categories data for dropdown
+// قائمة جميع التصنيفات المنسدلة
 const allCategories = [
   {
-    title: 'Mobiles',
-    items: ['Mobile Phones', 'Accessories', 'Smart Watches', 'Tablets', 'Landline Phones'],
+    title: 'هواتف ولوحات رقمية',
+    items: ['هواتف نقالة', 'أكسسوارات', 'ساعات ذكية', 'لوحات رقمية (Tablets)'],
   },
   {
-    title: 'Vehicles',
-    items: ['Cars', 'Spare Parts', 'Cars Accessories', 'Car Care', 'Buses, Vans & Trucks', 'Rickshaw & Chingchi', 'Tractors & Trailers', 'Oil & Lubricants'],
+    title: 'طوموبيلات ومركبات',
+    items: ['سيارات للبيع', 'قطع غيار', 'أكسسوارات السيارات', 'دراجات نارية'],
   },
   {
-    title: 'Bikes',
-    items: ['Motorcycles', 'Bicycles', 'Spare Parts', 'Scooters', 'Bikes Accessories', 'ATV & Quads', 'Bike Care'],
+    title: 'عقارات',
+    items: ['شقق للكراء', 'شقق للبيع', 'أراضي وبقع', 'مكاتب ومحلات تجارية'],
   },
   {
-    title: 'Business, Industrial & Agriculture',
-    items: ['Other Business & Industry', 'Food & Restaurants', 'Trade & Industrial Machinery', 'Medical & Pharma', 'Medical for Sale'],
+    title: 'خدمات',
+    items: ['دروس ودعم', 'إصلاحات منزلية', 'نقل وشحن', 'تنظيف ومساعدة'],
   },
   {
-    title: 'Jobs',
-    items: ['Other Jobs', 'Online', 'Part Time', 'Sales', 'Restaurants & Hospitality', 'Marketing', 'Customer Service', 'Domestic Staff', 'Education', 'Medical', 'Graphic Design', 'Delivery Riders', 'Accounting & Finance', 'IT & Networking', 'Clerical & Administration'],
-  },
-  {
-    title: 'Furniture & Home Decor',
-    items: ['Sofa & Chairs', 'Beds & Wardrobes', 'Other Household Items', 'Tables & Dining', 'Office Furniture', 'Home Decoration', 'Garden & Outdoor', 'Painting & Mirrors', 'Rugs & Carpets', 'Curtains & Blinds', 'Bathroom Accessories', 'Lighting', 'Home DIY & Renovations'],
-  },
-  {
-    title: 'Fashion & Beauty',
-    items: ['Clothes', 'Footwear', 'Watches', 'Jewellery', 'Bags', 'Makeup', 'Skin & Hair', 'Accessories'],
-  },
-  {
-    title: 'Electronics & Home Appliances',
-    items: ['Computers & Accessories', 'TV - Video - Audio', 'Cameras & Accessories', 'Games & Entertainment', 'Kitchen Appliances', 'AC & Coolers', 'Fridges & Freezers', 'Washing Machines & Dryers', 'Generators & UPS', 'Other Home Appliances'],
-  },
-  {
-    title: 'Animals',
-    items: ['Livestock', 'Hens & Aseel', 'Cats', 'Dogs', 'Birds', 'Fish & Aquariums', 'Pet Food & Accessories', 'Other Animals'],
-  },
-  {
-    title: 'Books, Sports & Hobbies',
-    items: ['Books & Magazines', 'Musical Instruments', 'Sports Equipment', 'Gym & Fitness', 'Other Hobbies'],
-  },
-  {
-    title: 'Kids',
-    items: ['Kids Furniture', 'Toys', 'Prams & Walkers', 'Swings & Slides', 'Kids Bikes', 'Kids Accessories'],
+    title: 'المنزل والديكور',
+    items: ['أثاث وصالونات', 'أدوات المطبخ', 'ديكور وإضاءة', 'أجهزة منزلية'],
   },
 ];
 
@@ -174,16 +100,18 @@ function AllCategoriesDropdown({ open, onClose }) {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open, onClose]);
+  
   if (!open) return null;
+  
   return (
-    <div ref={ref} className="absolute left-0 right-0 z-30 mt-2 px-4">
-      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-wrap gap-8 max-h-[420px] overflow-y-auto">
-        {allCategories.map((cat, idx) => (
-          <div key={cat.title} className="min-w-[180px]">
-            <div className="font-bold text-[#002f34] mb-2">{cat.title}</div>
+    <div ref={ref} className="absolute right-0 left-0 z-30 mt-2 px-4">
+      <div className="bg-white rounded-xl shadow-lg p-6 flex flex-wrap gap-8 max-h-[420px] overflow-y-auto border border-gray-100">
+        {allCategories.map((cat) => (
+          <div key={cat.title} className="min-w-[180px] text-right">
+            <div className="font-bold text-[#002f34] mb-2 border-b pb-1">{cat.title}</div>
             <ul className="space-y-1">
               {cat.items.map((item) => (
-                <li key={item} className="text-[#002f34] hover:underline cursor-pointer text-sm">{item}</li>
+                <li key={item} className="text-[#002f34] hover:text-blue-600 hover:underline cursor-pointer text-sm">{item}</li>
               ))}
             </ul>
           </div>
@@ -193,20 +121,19 @@ function AllCategoriesDropdown({ open, onClose }) {
   );
 }
 
-// Category strip data
 const categoryStrip = [
-  { name: 'Mobile Phones', slug: 'mobiles' },
-  { name: 'Cars', slug: 'cars' },
-  { name: 'Motorcycles', slug: 'motorcycles' },
-  { name: 'Houses', slug: 'houses' },
-  { name: 'Video-Audios', slug: 'video-audios' },
-  { name: 'Tablets', slug: 'tablets' },
-  { name: 'Land & Plots', slug: 'land-plots' },
+  { name: 'هواتف نقالة', slug: 'mobiles' },
+  { name: 'طوموبيلات', slug: 'cars' },
+  { name: 'دراجات نارية', slug: 'motorcycles' },
+  { name: 'ديور وشقق', slug: 'houses' },
+  { name: 'تلفزات وأجهزة صوت', slug: 'video-audios' },
+  { name: 'أراضي وبقع', slug: 'land-plots' },
 ];
 
 export default function HomePage() {
   const router = useRouter();
   const [allCatOpen, setAllCatOpen] = useState(false);
+  
   const handleCategoryClick = (category) => {
     router.push(`/category/${category.slug}`);
   };
@@ -216,28 +143,28 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" dir="rtl">
       <Navbar />
       
-      {/* Categories Horizontal Bar */}
+      {/* شريط التصنيفات العلوي */}
       <div className="w-full border-b bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 py-3 relative">
-            {/* All Categories Dropdown Trigger */}
+          <div className="flex items-center gap-4 overflow-x-auto py-3 relative no-scrollbar">
+            {/* زر جميع التصنيفات */}
             <div
-              className="flex items-center font-bold text-[#002f34] whitespace-nowrap cursor-pointer relative"
+              className="flex items-center font-bold text-[#002f34] whitespace-nowrap cursor-pointer relative gap-1 ml-4"
               onClick={() => setAllCatOpen((v) => !v)}
             >
-              All Categories
-              <svg className="ml-1" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="#002f34" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              جميع التصنيفات
+              <ChevronDown size={18} className={`transition-transform ${allCatOpen ? 'rotate-180' : ''}`} />
               <AllCategoriesDropdown open={allCatOpen} onClose={() => setAllCatOpen(false)} />
             </div>
-            {/* Category Names */}
+            {/* أسماء التصنيفات السريعة */}
             <div className="flex items-center gap-6">
               {categoryStrip.map((cat) => (
                 <span
                   key={cat.slug}
-                  className="text-[#002f34] font-normal cursor-pointer whitespace-nowrap hover:underline"
+                  className="text-[#002f34] font-normal cursor-pointer whitespace-nowrap hover:underline text-sm"
                   onClick={() => handleCategoryClick({ slug: cat.slug })}
                 >
                   {cat.name}
@@ -248,14 +175,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Banner Slider */}
       <BannerSlider />
 
-      {/* Categories Section */}
+      {/* قسم أيقونات التصنيفات */}
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-            Browse Categories
+          <h2 className="text-2xl font-bold text-gray-800 text-right mb-8">
+            تصفح حسب الأصناف
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {categories.map((category) => (
@@ -269,47 +195,48 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Category-wise Ads Section */}
+      {/* قسم الإعلانات حسب النوع */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Mobiles Row */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Mobiles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {recentAds.filter(ad => ad.category === 'Mobiles').map((ad) => (
+          
+          {/* صف الهواتف */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">أحدث الهواتف</h2>
+            <button className="text-blue-600 font-bold hover:underline">شوف كولشي</button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {recentAds.filter(ad => ad.category === 'هواتف').map((ad) => (
               <AdCard key={ad.id} ad={ad} onAdClick={handleAdClick} />
             ))}
           </div>
-          {/* Cars Row */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Cars</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {recentAds.filter(ad => ad.category === 'Cars').map((ad) => (
-              <AdCard key={ad.id} ad={ad} onAdClick={handleAdClick} />
-            ))}
+
+          {/* صف السيارات */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">طوموبيلات للبيع</h2>
+            <button className="text-blue-600 font-bold hover:underline">شوف كولشي</button>
           </div>
-          {/* Electronics Row */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Electronics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentAds.filter(ad => ad.category === 'Electronics').map((ad) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {recentAds.filter(ad => ad.category === 'سيارات').map((ad) => (
               <AdCard key={ad.id} ad={ad} onAdClick={handleAdClick} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* قسم دعوة للبيع (CTA) */}
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to sell something?
+            عندك شي حاجة باغي تبيعها؟
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Post your ad for free and reach millions of buyers
+            حط إعلانك دبا فابور ووصلي لآلاف الكليان فالمغرب كامل
           </p>
           <button 
-            className="bg-white text-blue-600 px-8 py-4 rounded-full hover:bg-gray-100 transition-colors font-semibold text-lg"
+            className="bg-white text-blue-600 px-10 py-4 rounded-full hover:bg-gray-100 transition-all font-bold text-lg shadow-xl active:scale-95"
             onClick={() => router.push('/post-ad')}
           >
-            Post Free Ad
+            نشر إعلان مجاني
           </button>
         </div>
       </section>
