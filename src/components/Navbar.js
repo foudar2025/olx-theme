@@ -5,9 +5,10 @@ import { Menu, X, User, Plus, ChevronDown, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 
+// مصفوفة الأصناف بالدارجة المغربية
 const categoryIcons = [
   {
-    name: 'Motors',
+    name: 'سيارات',
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="32" height="32" rx="8" fill="#F3F6FC"/>
@@ -18,7 +19,7 @@ const categoryIcons = [
     ),
   },
   {
-    name: 'Property',
+    name: 'عقارات',
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="32" height="32" rx="8" fill="#F3F6FC"/>
@@ -27,122 +28,105 @@ const categoryIcons = [
       </svg>
     ),
   },
+  {
+    name: 'هواتف',
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#F3F6FC"/>
+        <path d="M12 6h8a2 2 0 012 2v16a2 2 0 01-2 2h-8a2 2 0 01-2-2V8a2 2 0 012-2z" stroke="#222" strokeWidth="1.5"/>
+        <path d="M15 22h2" stroke="#222" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
 ];
 
+// المدن المغربية الكبرى
 const locations = [
-  'Pakistan',
-  'Lahore',
-  'Karachi',
-  'Islamabad',
-  'Faisalabad',
+  'المغرب كامل',
+  'الدار البيضاء',
+  'الرباط - سلا',
+  'مراكش',
+  'طنجة',
+  'أكادير',
+  'فاس',
+  'مكناس',
+  'وجدة',
+  'القنيطرة',
 ];
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState(locations[0]);
-  const [search, setSearch] = useState('');
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [location, setLocation] = useState('المغرب كامل');
   const router = useRouter();
   const pathname = usePathname();
 
   return (
-    <nav className="bg-[#eef3fc] shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-        <div className="flex flex-col gap-2">
-          {/* Top Row: Logo, Categories, Login, Sell */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              {/* QuickSell Logo */}
-              <div 
-                className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={() => router.push('/')}
-              >
-                <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <text x="10" y="27" fontSize="22" fontWeight="bold" fill="#3a77ff" fontFamily="Arial, Helvetica, sans-serif">QuickSell</text>
-                </svg>
-              </div>
-              {/* Categories */}
-              <div className="flex items-center gap-4">
-                {/* Motors */}
-                <div
-                  className={`flex items-center gap-1 cursor-pointer px-2 py-1 rounded-lg transition hover:opacity-80 ${pathname === '/motors' ? 'bg-white text-blue-700 font-bold' : ''}`}
-                  onClick={() => router.push('/motors')}
-                >
-                  {categoryIcons[0].icon}
-                  <span className="font-semibold text-base text-[#222]">Motors</span>
-                </div>
-                {/* Property */}
-                <div
-                  className={`flex items-center gap-1 cursor-pointer px-2 py-1 rounded-lg transition hover:opacity-80 ${pathname === '/property' ? 'bg-white text-blue-700 font-bold' : ''}`}
-                  onClick={() => router.push('/property')}
-                >
-                  {categoryIcons[1].icon}
-                  <span className="font-semibold text-base text-[#222]">Property</span>
-                </div>
-              </div>
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          
+          {/* الشعار والقائمة */}
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2">
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <div className="text-2xl font-bold text-blue-600 cursor-pointer" onClick={() => router.push('/')}>
+              BoostMe
             </div>
-            <div className="flex items-center gap-4">
-              <button
-                className="text-[#002f34] font-semibold underline underline-offset-2 hover:text-blue-700"
-                onClick={() => router.push('/auth/login')}
+          </div>
+
+          {/* محرك البحث (النسخة المكتبية) */}
+          <div className="hidden lg:flex flex-1 max-w-2xl mx-8 gap-2">
+            <div className="relative w-1/3">
+              <select 
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="w-full pl-8 pr-4 py-2 border-2 border-gray-900 rounded focus:outline-none appearance-none bg-white"
               >
-                Login
-              </button>
-              <button
-                className="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-yellow-400 bg-gradient-to-r from-yellow-200 to-blue-200 text-[#002f34] font-bold hover:from-yellow-300 hover:to-blue-300 transition-all"
-                onClick={() => router.push('/post-ad')}
-              >
-                <Plus className="w-5 h-5" />
-                SELL
+                {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+              </select>
+              <Search className="absolute left-2 top-2.5 text-gray-500" size={20} />
+            </div>
+            <div className="relative flex-1">
+              <input 
+                type="text" 
+                placeholder="قلب على سيارات، هواتف، عقارات..." 
+                className="w-full px-4 py-2 border-2 border-gray-900 rounded focus:outline-none"
+              />
+              <button className="absolute right-0 top-0 bottom-0 px-4 bg-gray-900 text-white rounded-r">
+                <Search size={20} />
               </button>
             </div>
           </div>
-          {/* Bottom Row: Location & Search - Hidden on motors and property pages */}
-          {pathname !== '/motors' && pathname !== '/property' && (
-            <div className="flex items-center gap-2 mt-2 w-full bg-white rounded-xl px-4 py-3 shadow-sm">
-              {/* Location Selector */}
-              <div className="relative" style={{ width: '220px' }}>
-                <button
-                  className="flex items-center w-full h-12 px-4 border border-gray-400 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                  type="button"
-                  style={{ minWidth: '180px' }}
-                >
-                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" className="mr-2"><path d="M12 21c4.97-4.97 8-8.03 8-11a8 8 0 10-16 0c0 2.97 3.03 6.03 8 11z" stroke="#3a77ff" strokeWidth="1.5"/></svg>
-                  <span className="flex-1 text-left">{selectedLocation}</span>
-                  <ChevronDown className="w-4 h-4 ml-2 text-gray-500" />
-                </button>
-                <div className="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10" style={{ display: 'none' }}>
-                  {locations.map((loc) => (
-                    <div
-                      key={loc}
-                      className="px-4 py-2 hover:bg-blue-50 cursor-pointer"
-                      onClick={() => setSelectedLocation(loc)}
-                    >
-                      {loc}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {/* Search Bar */}
-              <div className="flex-1 flex">
-                <input
-                  type="text"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-200 placeholder:text-gray-700"
-                  placeholder="Find Cars, Mobile Phones and more..."
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  style={{ minWidth: '0' }}
-                />
-                <button className="h-12 px-6 bg-[#002f34] text-white rounded-r-md flex items-center gap-2 font-semibold hover:bg-[#005266] transition-all">
-                  <Search className="w-5 h-5" />
-                  Search
-                </button>
-              </div>
-            </div>
-          )}
+
+          {/* أزرار الدخول وبيع وشري */}
+          <div className="flex items-center gap-4">
+            <button className="hidden sm:flex items-center gap-2 font-bold hover:underline">
+              <User size={20} />
+              <span>دخول</span>
+            </button>
+            <button 
+              className="flex items-center gap-2 bg-white border-4 border-t-yellow-400 border-l-blue-500 border-r-red-500 border-b-green-500 px-4 py-1 rounded-full font-bold shadow-sm hover:shadow-md transition-all"
+              onClick={() => router.push('/post')}
+            >
+              <Plus size={20} />
+              <span>بيع وشري</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* قائمة الأصناف تحت النافبار */}
+      <div className="hidden lg:flex bg-white border-b border-gray-100 py-2">
+        <div className="max-w-7xl mx-auto px-4 flex gap-8 items-center text-sm font-medium">
+          <span className="font-bold flex items-center gap-1 cursor-pointer">
+            جميع الأصناف <ChevronDown size={16} />
+          </span>
+          {categoryIcons.map((cat) => (
+            <span key={cat.name} className="hover:text-blue-600 cursor-pointer">{cat.name}</span>
+          ))}
         </div>
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
