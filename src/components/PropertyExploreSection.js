@@ -10,56 +10,56 @@ const PropertyExploreSection = () => {
   const propertyAds = [
     {
       id: 1,
-      title: '3 Marla House for Sale',
-      price: 'Rs 1.2 Crore',
-      location: 'DHA Phase 6, Lahore',
+      title: 'منزل مستقل للبيع',
+      price: '120 مليون سنتيم',
+      location: 'بوسكورة، الدار البيضاء',
       image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=400&q=80',
-      date: '2 days ago',
+      date: 'يومين',
       featured: true
     },
     {
       id: 2,
-      title: '5 Marla Commercial Plot',
-      price: 'Rs 2.5 Crore',
-      location: 'Bahria Town, Islamabad',
+      title: 'بقعة أرضية تجارية 100م²',
+      price: '250 مليون سنتيم',
+      location: 'طنجة البالية، طنجة',
       image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80',
-      date: '1 week ago',
+      date: 'أسبوع واحد',
       featured: false
     },
     {
       id: 3,
-      title: '2 Bed Apartment for Sale',
-      price: 'Rs 85 Lacs',
-      location: 'Gulberg III, Lahore',
+      title: 'شقة للبيع غرفتين وصالون',
+      price: '85 مليون سنتيم',
+      location: 'أكدال، الرباط',
       image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=80',
-      date: '3 days ago',
+      date: '3 أيام',
       featured: true
     },
     {
       id: 4,
-      title: '10 Marla Residential Plot',
-      price: 'Rs 3.2 Crore',
-      location: 'Defence Phase 8, Karachi',
+      title: 'بقعة أرضية للسكن',
+      price: '32 مليون سنتيم',
+      location: 'طريق صفرو، فاس',
       image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=400&q=80',
-      date: '5 days ago',
+      date: '5 أيام',
       featured: false
     },
     {
       id: 5,
-      title: 'Shop for Sale',
-      price: 'Rs 1.8 Crore',
-      location: 'Saddar, Rawalpindi',
+      title: 'محل تجاري محفظ',
+      price: '180 مليون سنتيم',
+      location: 'جليز، مراكش',
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80',
-      date: '1 day ago',
+      date: 'يوم واحد',
       featured: true
     },
     {
       id: 6,
-      title: 'Farm House for Sale',
-      price: 'Rs 5.5 Crore',
-      location: 'Murree Road, Islamabad',
+      title: 'فيلا فاخرة للبيع',
+      price: '550 مليون سنتيم',
+      location: 'طريق تاهلة، وجدة',
       image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80',
-      date: '2 weeks ago',
+      date: 'أسبوعين',
       featured: false
     }
   ];
@@ -69,21 +69,21 @@ const PropertyExploreSection = () => {
   };
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-[#002f34]">
-            Explore Properties
+          <h2 className="text-2xl md:text-3xl font-bold text-[#002f34]">
+            استكشف العقارات
           </h2>
           <button 
             onClick={() => router.push('/category/property')}
-            className="text-blue-600 font-semibold hover:text-blue-800"
+            className="text-blue-600 font-bold hover:text-blue-800 transition-colors"
           >
-            View All Properties →
+            عرض جميع العقارات ←
           </button>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {propertyAds.map((ad) => (
             <AdCard key={ad.id} ad={ad} onAdClick={handleAdClick} />
           ))}
@@ -93,4 +93,4 @@ const PropertyExploreSection = () => {
   );
 };
 
-export default PropertyExploreSection; 
+export default PropertyExploreSection;
