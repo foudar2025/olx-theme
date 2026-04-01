@@ -1,46 +1,65 @@
+'use client';
+
 import React, { useState } from 'react';
 
-export default function Carousel({ images }) {
+export default function Carousel({ images = [] }) {
   const [current, setCurrent] = useState(0);
   const total = images.length;
 
-  const prev = () => setCurrent((current - 1 + total) % total);
+  if (total === 0) return (
+    <div className="w-full h-[420px] bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
+      لا توجد صور متاحة
+    </div>
+  );
+
+  // في الـ RTL: التالي هو السهم الأيسر، والسابق هو الأيمن
   const next = () => setCurrent((current + 1) % total);
+  const prev = () => setCurrent((current - 1 + total) % total);
 
   return (
-    <div className="relative w-full h-[420px] bg-black rounded-2xl overflow-hidden flex items-center justify-center">
+    <div className="relative w-full h-[420px] bg-gray-900 rounded-2xl overflow-hidden flex items-center justify-center group" dir="ltr">
+      {/* الصورة الحالية */}
       <img
         src={images[current]}
-        alt={`Product image ${current + 1}`}
-        className="object-contain w-full h-full"
+        alt={`صورة المنتج ${current + 1}`}
+        className="object-contain w-full h-full transition-opacity duration-500"
       />
-      {/* Prev Button */}
+
+      {/* زر التنقل الأيمن (السابق في المنطق العربي) */}
       <button
         onClick={prev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white text-[#002f34] rounded-full p-3 shadow-lg hover:bg-gray-200 transition z-10 text-2xl font-bold border border-gray-300"
-        aria-label="Previous image"
-        style={{ opacity: 1 }}
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 text-[#002f34] rounded-full w-12 h-12 flex items-center justify-center shadow-xl hover:bg-white transition-all z-10 opacity-0 group-hover:opacity-100 border border-gray-100"
+        aria-label="الصورة السابقة"
       >
-        &#8592;
+        <span className="text-2xl font-bold">→</span>
       </button>
-      {/* Next Button */}
+
+      {/* زر التنقل الأيسر (التالي في المنطق العربي) */}
       <button
         onClick={next}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white text-[#002f34] rounded-full p-3 shadow-lg hover:bg-gray-200 transition z-10 text-2xl font-bold border border-gray-300"
-        aria-label="Next image"
-        style={{ opacity: 1 }}
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 text-[#002f34] rounded-full w-12 h-12 flex items-center justify-center shadow-xl hover:bg-white transition-all z-10 opacity-0 group-hover:opacity-100 border border-gray-100"
+        aria-label="الصورة التالية"
       >
-        &#8594;
+        <span className="text-2xl font-bold">←</span>
       </button>
-      {/* Indicators */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+
+      {/* مؤشرات الصور (Dots) */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-row-reverse gap-2 bg-black/20 px-3 py-2 rounded-full backdrop-blur-sm">
         {images.map((_, idx) => (
-          <span
+          <button
             key={idx}
-            className={`w-2 h-2 rounded-full ${idx === current ? 'bg-blue-600' : 'bg-gray-300'}`}
+            onClick={() => setCurrent(idx)}
+            className={`transition-all duration-300 rounded-full ${
+              idx === current ? 'w-6 h-2 bg-blue-500' : 'w-2 h-2 bg-white/60 hover:bg-white'
+            }`}
           />
         ))}
       </div>
+
+      {/* عداد الصور الرقمي */}
+      <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-lg text-xs font-bold backdrop-blur-md">
+        {total} / {current + 1}
+      </div>
     </div>
   );
-} 
+}
