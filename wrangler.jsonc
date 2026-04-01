@@ -1,14 +1,19 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "boostme",
+  "main": ".open-next/worker.js", // هاد السطر هو اللي كان ناقص
   "compatibility_date": "2025-03-01",
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "assets": {
+    "directory": ".open-next/assets", // وهادا باش يلقى الصور والملفات
+    "binding": "ASSETS"
+  },
   "kv_namespaces": [
     {
       "binding": "NEXT_CACHE_WORKERS_KV",
-      "id": "787625895744470984928b5773663a8a" 
+      "id": "787625895744470984928b5773663a8a"
     }
   ],
   "observability": {
