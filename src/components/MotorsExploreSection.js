@@ -5,34 +5,34 @@ import { useRouter } from 'next/navigation';
 
 const exploreCards = [
   {
-    title: 'New Cars',
-    desc: 'Find your dream new car',
-    icon: '🚗',
+    title: 'سيارات جديدة',
+    desc: 'اكتشف أحدث الموديلات في المغرب',
+    icon: '🏢', // أيقونة وكالة سيارات
     route: '/category/new-cars'
   },
   {
-    title: 'Car Comparison',
-    desc: 'Confused? Easy way to compare cars!',
+    title: 'مقارنة السيارات',
+    desc: 'حاير؟ قارن بين المواصفات بسهولة',
     icon: '⚖️',
     route: '/compare'
   },
   {
-    title: 'Car Reviews',
-    desc: 'Browse the latest car reviews',
-    icon: '📝',
+    title: 'تقييمات السيارات',
+    desc: 'آراء الخبراء والمستخدمين حول السيارات',
+    icon: '⭐',
     route: '/reviews'
   },
   {
-    title: 'Car Inspection',
-    desc: 'Book your Inspection today',
-    icon: '🔍',
+    title: 'فحص السيارة',
+    desc: 'احجز فحص تقني لسيارتك اليوم',
+    icon: '🛠️',
     route: '/inspection'
   },
   {
-    title: 'Auction Sheet',
-    desc: 'Request the Auction Sheet now',
-    icon: '📄',
-    route: '/auction-sheet'
+    title: 'خدمات التوثيق',
+    desc: 'كل ما تحتاجه لنقل الملكية والأوراق',
+    icon: '📋',
+    route: '/documentation'
   },
 ];
 
@@ -44,21 +44,31 @@ export default function MotorsExploreSection() {
   };
 
   return (
-    <section className="mt-8">
-      <h2 className="text-2xl md:text-3xl font-bold text-[#002f34] mb-4">Explore OLX Motors</h2>
+    <section className="mt-8" dir="rtl">
+      {/* تغيير العنوان الرئيسي ليتناسب مع اسم براندك BoostMe */}
+      <h2 className="text-2xl md:text-3xl font-bold text-[#002f34] mb-6 text-right">
+        استكشف عالم السيارات مع BoostMe
+      </h2>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {exploreCards.map(card => (
           <div 
             key={card.title} 
-            className="bg-gray-100 rounded-xl p-4 flex flex-col items-center justify-center shadow-sm cursor-pointer hover:bg-gray-200 transition-colors"
+            className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm cursor-pointer hover:shadow-md hover:border-blue-200 transition-all group"
             onClick={() => handleCardClick(card.route)}
           >
-            <div className="text-4xl mb-2">{card.icon}</div>
-            <div className="font-bold text-[#002f34] mb-1 text-center">{card.title}</div>
-            <div className="text-gray-700 text-sm text-center">{card.desc}</div>
+            <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+              {card.icon}
+            </div>
+            <div className="font-bold text-[#002f34] mb-2 text-center text-lg">
+              {card.title}
+            </div>
+            <div className="text-gray-500 text-sm text-center leading-relaxed">
+              {card.desc}
+            </div>
           </div>
         ))}
       </div>
     </section>
   );
-} 
+}
