@@ -2,15 +2,13 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
-    // استقبال البيانات من واجهة الموقع
-    const { email, password } = await request.json();
-    
-    // الربط مع قاعدة البيانات D1 (تأكد أن الاسم DB مطابق لما في wrangler.toml)
-    const { env } = request; 
-    
+    const { email, password, name } = await request.json(); // استلام الاسم أيضاً
+    const { env } = request;
+
+    // توليد ID فريد
     const id = crypto.randomUUID();
 
-    // إدخال بيانات المستخدم الجديد في الجدول الذي أنشأته
+    // تحديد الأعمدة بدقة لتجنب تضارب مع created_at
     await env.DB.prepare(
       "INSERT INTO users (id, email, password) VALUES (?, ?, ?)"
     )
@@ -19,9 +17,9 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true, message: "تم تسجيل الحساب في BoostMe!" });
   } catch (error) {
-    // في حال كان البريد مسجلاً مسبقاً أو حدث خطأ تقني
+    console.error(error);
     return NextResponse.json(
-      { success: false, error: "البريد الإلكتروني موجود مسبقاً أو هناك مشكلة في الاتصال" },
+      { success: false, error: "البريد موجود مسبقاً أو هناك مشكلة في البيانات" },
       { status: 400 }
     );
   }
