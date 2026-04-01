@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
 import Link from 'next/link';
 
 export default function AuthForm({ mode = 'login', onSubmit }) {
@@ -37,31 +35,45 @@ export default function AuthForm({ mode = 'login', onSubmit }) {
       setErrors(errs);
       return;
     }
+    
     setSubmitting(true);
     
-    // محاكاة عملية الاتصال بالسيرفر
-    await new Promise((r) => setTimeout(r, 1500)); 
-    
-    setSubmitting(false);
-    
-    // تنبيه تجريبي للمستخدم
-    alert(mode === 'login' ? 'تم تسجيل الدخول بنجاح (تجريبي)' : 'تم إنشاء الحساب بنجاح (تجريبي)');
-    
-    if (onSubmit) onSubmit(form);
-  };
+    try {
+      // إرسال البيانات إلى الـ API الذي أنشأناه في Cloudflare
+      const endpoint = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          name: form.name
+        }),
+      });
 
-  // وظيفة تجريبية لأزرار التواصل الاجتماعي
-  const handleSocialLogin = (platform) => {
-    alert(`التسجيل عبر ${platform} قيد التطوير حالياً لمشروع BoostMe`);
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(mode === 'register' ? 'مبروك! تم إنشاء حسابك في BoostMe بنجاح.' : 'مرحباً بك من جديد!');
+        if (onSubmit) onSubmit(form);
+      } else {
+        alert(data.error || 'حدث خطأ، تأكد من البيانات ديالك');
+      }
+    } catch (error) {
+      alert('خطأ في الاتصال بالسيرفر. تأكد أنك رفعت التعديلات (Deploy)');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div className="max-w-md w-full mx-auto bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl p-10 mt-12 mb-8 border border-blue-100" dir="rtl">
+    <div className="max-w-md w-full mx-auto bg-white rounded-3xl shadow-2xl p-10 mt-12 mb-8 border border-blue-50" dir="rtl">
       <h2 className="text-3xl font-extrabold text-center text-blue-700 mb-2">
         {mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب جديد'}
       </h2>
       <p className="text-center text-gray-600 mb-8">
-        {mode === 'login' ? 'مرحباً بعودتك! سجل الدخول للحساب ديالك.' : 'مرحباً بيك! صاوب حسابك فثواني.'}
+        {mode === 'login' ? 'مرحباً بعودتك لـ BoostMe!' : 'انضم لأكبر منصة إعلانات فالمغرب.'}
       </p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-right">
@@ -70,11 +82,10 @@ export default function AuthForm({ mode = 'login', onSubmit }) {
             <input
               type="text"
               name="name"
-              autoComplete="name"
               placeholder="الاسم الكامل"
               value={form.name}
               onChange={handleChange}
-              className={`w-full p-4 rounded-xl border ${errors.name ? 'border-red-400' : 'border-gray-200'} focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white shadow-sm placeholder-gray-400 text-lg text-gray-800 outline-none`}
+              className={`w-full p-4 rounded-xl border ${errors.name ? 'border-red-400' : 'border-gray-200'} focus:ring-2 focus:ring-blue-400 outline-none bg-gray-50 text-gray-800`}
             />
             {errors.name && <div className="text-red-500 text-sm mt-1 mr-2">{errors.name}</div>}
           </div>
@@ -84,11 +95,10 @@ export default function AuthForm({ mode = 'login', onSubmit }) {
           <input
             type="email"
             name="email"
-            autoComplete="email"
             placeholder="البريد الإلكتروني"
             value={form.email}
             onChange={handleChange}
-            className={`w-full p-4 rounded-xl border ${errors.email ? 'border-red-400' : 'border-gray-200'} focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white shadow-sm placeholder-gray-400 text-lg text-gray-800 outline-none`}
+            className={`w-full p-4 rounded-xl border ${errors.email ? 'border-red-400' : 'border-gray-200'} focus:ring-2 focus:ring-blue-400 outline-none bg-gray-50 text-gray-800`}
           />
           {errors.email && <div className="text-red-500 text-sm mt-1 mr-2">{errors.email}</div>}
         </div>
@@ -97,11 +107,10 @@ export default function AuthForm({ mode = 'login', onSubmit }) {
           <input
             type="password"
             name="password"
-            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
             placeholder="كلمة السر"
             value={form.password}
             onChange={handleChange}
-            className={`w-full p-4 rounded-xl border ${errors.password ? 'border-red-400' : 'border-gray-200'} focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white shadow-sm placeholder-gray-400 text-lg text-gray-800 outline-none`}
+            className={`w-full p-4 rounded-xl border ${errors.password ? 'border-red-400' : 'border-gray-200'} focus:ring-2 focus:ring-blue-400 outline-none bg-gray-50 text-gray-800`}
           />
           {errors.password && <div className="text-red-500 text-sm mt-1 mr-2">{errors.password}</div>}
         </div>
@@ -109,47 +118,24 @@ export default function AuthForm({ mode = 'login', onSubmit }) {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg shadow-lg transition-all disabled:opacity-60 active:scale-95 flex justify-center items-center"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg shadow-md transition-all disabled:opacity-50 active:scale-95"
         >
-          {submitting ? (
-            <span className="flex items-center gap-2">
-               جاري التحميل...
-            </span>
-          ) : (mode === 'login' ? 'دخل للحساب' : 'تسجيل')}
+          {submitting ? 'جاري التحميل...' : (mode === 'login' ? 'دخل للحساب' : 'إنشاء الحساب')}
         </button>
       </form>
 
-      <div className="mt-6 text-center">
+      <div className="mt-8 text-center border-t pt-6">
         {mode === 'login' ? (
-          <span className="text-gray-600">ماعندكش حساب؟{' '}
+          <p className="text-gray-600">
+            ماعندكش حساب؟{' '}
             <Link href="/auth/register" className="text-blue-600 hover:underline font-bold">سجل دبا</Link>
-          </span>
+          </p>
         ) : (
-          <span className="text-gray-600">عندك حساب ديجا؟{' '}
+          <p className="text-gray-600">
+            عندك حساب ديجا؟{' '}
             <Link href="/auth/login" className="text-blue-600 hover:underline font-bold">دخل من هنا</Link>
-          </span>
+          </p>
         )}
-      </div>
-
-      <div className="flex items-center my-6">
-        <div className="flex-1 h-px bg-gray-200" />
-        <span className="mx-4 text-gray-400 font-medium">أو</span>
-        <div className="flex-1 h-px bg-gray-200" />
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <button 
-          onClick={() => handleSocialLogin('Google')}
-          className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:border-blue-400 text-gray-700 font-bold py-3 rounded-xl shadow-sm transition-all active:scale-95"
-        >
-          <FcGoogle className="w-6 h-6" /> كمل باستعمال Google
-        </button>
-        <button 
-          onClick={() => handleSocialLogin('Facebook')}
-          className="w-full flex items-center justify-center gap-3 bg-[#1877F2] hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow-sm transition-all active:scale-95"
-        >
-          <FaFacebook className="w-6 h-6" /> كمل باستعمال Facebook
-        </button>
       </div>
     </div>
   );
