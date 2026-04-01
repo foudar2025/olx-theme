@@ -1,6 +1,7 @@
-name = "olx-theme"
+name = "boostme" # تأكد أن الاسم يطابق اسم الـ Worker في الصورة
+main = ".next/standalone/server.js" # هذا المسار مهم لعمل Next.js على Workers
 compatibility_date = "2024-04-01"
-pages_build_output_dir = ".next" 
+compatibility_flags = [ "nodejs_compat" ]
 
 [[d1_databases]]
 binding = "DB"
