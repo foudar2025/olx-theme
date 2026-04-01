@@ -1,26 +1,32 @@
 import { NextResponse } from 'next/server';
 
+export const runtime = 'edge'; // تأكيد تشغيل الكود على Edge Runtime
+
 export async function POST(request) {
   try {
-    const { email, password } = await request.json(); 
-    const { env } = request;
+    const { email, password } = await request.json();
+    
+    // محاولة الحصول على قاعدة البيانات من عدة مصادر محتملة
+    const db = request.env?.DB || process.env.DB;
 
-    // توليد ID فريد يدوياً لأن D1 قد يحتاجه كـ TEXT
+    if (!db) {
+      throw new Error("Database binding 'DB' not found");
+    }
+
     const id = crypto.randomUUID();
 
-    // تحديد أسماء الأعمدة بدقة لتجنب التضارب مع created_at
-    await env.DB.prepare(
+    await db.prepare(
       "INSERT INTO users (id, email, password) VALUES (?, ?, ?)"
     )
     .bind(id, email, password)
     .run();
 
-    return NextResponse.json({ success: true, message: "تم تسجيل الحساب!" });
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("D1 Error:", error);
+    console.error("Registration Error:", error.message);
     return NextResponse.json(
-      { success: false, error: "البريد موجود مسبقاً أو هناك مشكلة في البيانات" },
-      { status: 400 }
+      { success: false, error: "فشل الاتصال بقاعدة البيانات أو البريد مستخدم" },
+      { status: 500 }
     );
   }
 }
