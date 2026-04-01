@@ -1,74 +1,107 @@
+'use client';
+
 import React from 'react';
 
 export default function FilterSidebar({ filters, onChange }) {
+  // دالة لتحديث الفلاتر عند التغيير
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (onChange) {
+      onChange({ ...filters, [name]: value });
+    }
+  };
+
   return (
-    <aside className="bg-white rounded-2xl shadow-md p-6 w-full md:w-64 mb-8 md:mb-0">
-      <h3 className="text-lg font-semibold mb-4 text-gray-900">Filters</h3>
+    <aside className="bg-white rounded-2xl shadow-md p-6 w-full md:w-64 mb-8 md:mb-0" dir="rtl">
+      <h3 className="text-xl font-bold mb-6 text-gray-900 border-b pb-2">الفلاتر</h3>
       
-      {/* Price Range */}
+      {/* نطاق الثمن */}
       <div className="mb-6">
-        <label className="block text-gray-900 font-medium mb-2">Price Range</label>
+        <label className="block text-gray-900 font-bold mb-3 text-sm">نطاق الثمن (درهم)</label>
         <div className="flex gap-2">
           <input 
             type="number" 
-            placeholder="Min" 
-            className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 placeholder-gray-500 text-gray-900" 
+            name="minPrice"
+            placeholder="الأدنى" 
+            value={filters?.minPrice || ''}
+            onChange={handleInputChange}
+            className="w-1/2 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400 text-gray-900 text-sm" 
           />
           <input 
             type="number" 
-            placeholder="Max" 
-            className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 placeholder-gray-500 text-gray-900" 
+            name="maxPrice"
+            placeholder="الأقصى" 
+            value={filters?.maxPrice || ''}
+            onChange={handleInputChange}
+            className="w-1/2 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400 text-gray-900 text-sm" 
           />
         </div>
       </div>
       
-      {/* Location */}
+      {/* الموقع */}
       <div className="mb-6">
-        <label className="block text-gray-900 font-medium mb-2">Location</label>
+        <label className="block text-gray-900 font-bold mb-3 text-sm">الموقع / المدينة</label>
         <input 
           type="text" 
-          placeholder="Enter location" 
-          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 placeholder-gray-500 text-gray-900" 
+          name="location"
+          placeholder="مثلاً: الدار البيضاء" 
+          value={filters?.location || ''}
+          onChange={handleInputChange}
+          className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400 text-gray-900 text-sm" 
         />
       </div>
       
-      {/* Condition */}
+      {/* الحالة */}
       <div className="mb-6">
-        <label className="block text-gray-900 font-medium mb-2">Condition</label>
-        <select className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900">
-          <option value="">Any</option>
-          <option value="new">New</option>
-          <option value="used">Used</option>
+        <label className="block text-gray-900 font-bold mb-3 text-sm">حالة المنتج</label>
+        <select 
+          name="condition"
+          value={filters?.condition || ''}
+          onChange={handleInputChange}
+          className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900 bg-white text-sm"
+        >
+          <option value="">الكل</option>
+          <option value="new">جديد</option>
+          <option value="used">مستعمل</option>
         </select>
       </div>
       
-      {/* Year Range */}
-      <div className="mb-6">
-        <label className="block text-gray-900 font-medium mb-2">Year Range</label>
+      {/* سنة الموديل */}
+      <div className="mb-8">
+        <label className="block text-gray-900 font-bold mb-3 text-sm">سنة الموديل</label>
         <div className="flex gap-2">
-          <select className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900">
-            <option value="">From</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
+          <select 
+            name="yearFrom"
+            value={filters?.yearFrom || ''}
+            onChange={handleInputChange}
+            className="w-1/2 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900 bg-white text-sm"
+          >
+            <option value="">من</option>
+            {[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018].map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
           </select>
-          <select className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900">
-            <option value="">To</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
+          <select 
+            name="yearTo"
+            value={filters?.yearTo || ''}
+            onChange={handleInputChange}
+            className="w-1/2 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900 bg-white text-sm"
+          >
+            <option value="">إلى</option>
+            {[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018].map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
           </select>
         </div>
       </div>
       
-      {/* Apply Filters Button */}
-      <button className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition-colors">
-        Apply Filters
+      {/* زر تطبيق الفلاتر */}
+      <button 
+        onClick={() => alert('جاري البحث بالنتائج المختارة...')}
+        className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg active:scale-95"
+      >
+        تطبيق الفلاتر
       </button>
     </aside>
   );
-} 
+}
