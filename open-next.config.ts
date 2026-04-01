@@ -17,6 +17,7 @@ const config: OpenNextConfig = {
       proxyExternalRequest: "fetch",
     },
   },
+  edgeExternals: ["node:crypto"],
 };
 
 export default config;
