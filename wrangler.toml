@@ -1,9 +1,4 @@
-name = "boostme" # تأكد أن الاسم يطابق اسم الـ Worker في الصورة
-main = ".next/standalone/server.js" # هذا المسار مهم لعمل Next.js على Workers
-compatibility_date = "2024-04-01"
-compatibility_flags = [ "nodejs_compat" ]
-
 [[d1_databases]]
-binding = "DB"
-database_name = "boostme-db"
-database_id = "f05021e8-71e8-4673-9878-5e581283738e"
+binding = "DB" # هذا هو الاسم الذي يبحث عنه الكود
+database_name = "boostme-db" # اسم القاعدة في حسابك
+database_id = "f05021e8-71e8-4673-9878-5e581283738e" # المعرف الخاص بك
