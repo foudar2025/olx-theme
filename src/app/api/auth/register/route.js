@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
 
-export const runtime = 'edge'; // تأكيد تشغيل الكود على Edge Runtime
-
+// ملاحظة: حذفنا سطر export const runtime = 'edge' هنا حلًا للخطأ
 export async function POST(request) {
   try {
     const { email, password } = await request.json();
     
-    // محاولة الحصول على قاعدة البيانات من عدة مصادر محتملة
-    const db = request.env?.DB || process.env.DB;
+    // في OpenNext و Cloudflare Pages، يتم الوصول لـ D1 عبر request.context
+    // أو مباشرة عبر env إذا تم تمريره
+    const env = request.env || request.context?.env;
+    const db = env?.DB;
 
     if (!db) {
-      throw new Error("Database binding 'DB' not found");
+      console.error("Database 'DB' not found in env");
+      return NextResponse.json({ success: false, error: "قاعدة البيانات غير متصلة" }, { status: 500 });
     }
 
     const id = crypto.randomUUID();
@@ -21,12 +23,12 @@ export async function POST(request) {
     .bind(id, email, password)
     .run();
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: "تم التسجيل بنجاح!" });
   } catch (error) {
-    console.error("Registration Error:", error.message);
+    console.error("D1 Error:", error.message);
     return NextResponse.json(
-      { success: false, error: "فشل الاتصال بقاعدة البيانات أو البريد مستخدم" },
-      { status: 500 }
+      { success: false, error: "البريد موجود مسبقاً أو هناك خطأ تقني" },
+      { status: 400 }
     );
   }
 }
